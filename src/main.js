@@ -4,6 +4,7 @@ import router from './router'
 import axios  from 'axios'
 import ElementUI from 'element-ui';
 import 'element-ui/lib/theme-chalk/index.css';
+import { Loading } from 'element-ui';
 
 // axios.defaults.baseURL = 'https://www.escook.cn'
 axios.defaults.baseURL = 'http://localhost:3000'
@@ -28,6 +29,17 @@ Vue.filter('formatDate',(dateStr) => {
 function paddingZero(n) {
   return n < 10 ? '0'+ n : n
 }
+
+let loadingInstance = null
+axios.interceptors.request.use(config => {
+  loadingInstance = Loading.service({fullscreen:true})
+return config
+})
+
+axios.interceptors.response.use(config => {
+  loadingInstance.close()
+  
+})
 new Vue({
   router,
   render: h => h(App)
